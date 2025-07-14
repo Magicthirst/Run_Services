@@ -19,14 +19,14 @@ fi
 MSYS_NO_PATHCONV=1 docker run -d \
   --name service-hosts \
   -v 'volume_service_hosts_py:/app/data' \
-  -e 'DB=/app/data/hosts.db' \
+  -e 'DB=/app/data/hosts.debug.json' \
   -p 8001:8000 \
   service_hosts_py:latest
 
 MSYS_NO_PATHCONV=1 docker run -d \
   --name service-auth \
   -v 'volume_service_auth_py:/app/data' \
-  -e 'DB=/app/data/auth.db' \
+  -e 'DB=/app/data/auth.debug.db' \
   -p 8002:8000 \
   service_auth_py:latest
 

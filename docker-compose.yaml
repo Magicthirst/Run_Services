@@ -8,7 +8,7 @@ services:
     volumes:
       - volume_service_hosts_py:/app/data
     environment:
-      - DB=/app/data/hosts.db
+      - DB=/app/data/hosts.debug.json
 #    ports:
 #      - "8001:8000"
 
@@ -18,7 +18,7 @@ services:
     volumes:
       - volume_service_auth_py:/app/data
     environment:
-      - DB=/app/data/auth.db
+      - DB=/app/data/auth.debug.db
 #    ports:
 #      - "8002:8000"
 
@@ -39,6 +39,8 @@ services:
   web-client-dashboard:
     image: host-dashboard:latest
     container_name: web-client-dashboard
+    environment:
+      - VITE_API_URL=http://localhost:8000
     ports:
       - "8080:8000"
 
