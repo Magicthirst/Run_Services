@@ -22,27 +22,36 @@ services:
 #    ports:
 #      - "8002:8000"
 
+  service-sync:
+    image: service_sync:latest
+    container_name: service-sync
+    ports:
+      - "8765:8765"
+
   service-gateway:
     image: service_gateway_py:latest
     container_name: service-gateway
     environment:
       - HOSTS_URL=http://service-hosts:8000
       - AUTH_URL=http://service-auth:8000
-      - SYNC_OUTLET_URL=http://localhost:8765 # If this refers to a service outside compose or on host
-      - SYNC_MAIN_URL=http://localhost:8766   # If this refers to a service outside compose or on host
+      - SYNC_OUTLET_URL=http://service-sync:8765
+      - SYNC_MAIN_URL=http:http://service-sync:8766
     ports:
       - "8000:8000"
     depends_on:
-      - service-hosts # Ensure hosts and auth are up before gateway starts
+      - service-hosts
       - service-auth
+      - service-sync
 
   web-client-dashboard:
     image: host-dashboard:latest
     container_name: web-client-dashboard
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - VITE_API_URL=http://service-gateway:8000
     ports:
       - "8080:8000"
+    depends_on:
+      - service-gateway
 
 volumes:
   volume_service_hosts_py:
